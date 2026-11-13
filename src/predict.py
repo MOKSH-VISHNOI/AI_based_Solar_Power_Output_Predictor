@@ -16,6 +16,13 @@ import requests
 import numpy as np
 import pandas as pd
 import joblib
+import time
+
+# ---------------------------------------------------------------------------
+# Simple in-memory weather cache (TTL = 1 hour) to avoid Open-Meteo 429 errors
+# ---------------------------------------------------------------------------
+_WEATHER_CACHE: dict = {}
+_WEATHER_CACHE_TTL: int = 3600  # seconds
 
 from src.config import (
     MODEL_FILE_PATH,
@@ -71,8 +78,14 @@ def resolve_location(location_name: str):
 
 def fetch_weather_forecast(latitude: float, longitude: float, forecast_days: int = 7) -> pd.DataFrame:
     """
-    Fetches hourly weather forecast from Open-Meteo.
+    Fetches hourly weather forecast from Open-Meteo with 1-hour in-memory cache
+    to avoid 429 rate-limit errors on cloud deployments.
     """
+    cache_key = f"{latitude:.4f},{longitude:.4f},{forecast_days}"
+    cached = _WEATHER_CACHE.get(cache_key)
+    if cached and (time.time() - cached["ts"]) < _WEATHER_CACHE_TTL:
+        return cached["df"].copy()
+
     params = {
         "latitude": latitude,
         "longitude": longitude,
@@ -99,6 +112,8 @@ def fetch_weather_forecast(latitude: float, longitude: float, forecast_days: int
     df["hour"] = df["time"].dt.hour
     df["month"] = df["time"].dt.month
     df["date_str"] = df["time"].dt.strftime("%Y-%m-%d")
+
+    _WEATHER_CACHE[cache_key] = {"df": df, "ts": time.time()}
     return df
 
 def map_weather_condition(code: int, cloud_cover: float):
