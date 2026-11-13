@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SolarPredict — AI Solar Energy Output Predictor</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <!-- Stylesheet: supports both local root style.css and static/css/style.css -->
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="static/css/style.css">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-top">
+                <div class="brand">
+                    <div class="brand-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <line x1="12" y1="1" x2="12" y2="3"></line>
+                            <line x1="12" y1="21" x2="12" y2="23"></line>
+                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                            <line x1="1" y1="12" x2="3" y2="12"></line>
+                            <line x1="21" y1="12" x2="23" y2="12"></line>
+                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                        </svg>
+                    </div>
+                    <div class="brand-text">
+                        <h2>SolarPredict</h2>
+                        <span>AI for a Brighter Tomorrow</span>
+                    </div>
+                </div>
+
+                <nav class="nav-menu">
+                    <a href="#dashboard" class="nav-item active" data-tab="dashboard">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="#predictions" class="nav-item" data-tab="predictions">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                        <span>Predictions</span>
+                    </a>
+                    <a href="#history" class="nav-item" data-tab="history">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span>History</span>
+                    </a>
+                    <a href="#locations" class="nav-item" data-tab="locations">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span>Locations</span>
+                    </a>
+                    <a href="#models" class="nav-item" data-tab="models">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
+                        <span>Model Metrics</span>
+                    </a>
+                    <a href="#about" class="nav-item" data-tab="about">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                        <span>About</span>
+                    </a>
+                </nav>
+            </div>
+
+            <div class="sidebar-bottom-banner">
+                <div class="banner-image">
+                    <svg viewBox="0 0 240 100" fill="none" xmlns="http://www.w3.org/2000/svg" class="solar-svg-art">
+                        <defs>
+                            <linearGradient id="skyGrad" x1="0" y1="0" x2="0" y2="100" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stop-color="#7C2D12"/>
+                                <stop offset="40%" stop-color="#EA580C"/>
+                                <stop offset="80%" stop-color="#F59E0B"/>
+                                <stop offset="100%" stop-color="#1E293B"/>
+                            </linearGradient>
+                            <linearGradient id="panelGrad" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="0%" stop-color="#1E3A8A"/>
+                                <stop offset="100%" stop-color="#0F172A"/>
+                            </linearGradient>
+                        </defs>
+                        <rect width="240" height="100" rx="10" fill="url(#skyGrad)"/>
+                        <circle cx="160" cy="45" r="22" fill="#FEF08A" opacity="0.9"/>
+                        <!-- PV Panels in perspective -->
+                        <polygon points="15,95 85,95 70,55 25,55" fill="url(#panelGrad)" stroke="#38BDF8" stroke-width="1"/>
+                        <polygon points="90,95 160,95 145,55 100,55" fill="url(#panelGrad)" stroke="#38BDF8" stroke-width="1"/>
+                        <polygon points="165,95 235,95 220,55 175,55" fill="url(#panelGrad)" stroke="#38BDF8" stroke-width="1"/>
+                        <!-- Grid lines on panels -->
+                        <line x1="20" y1="75" x2="80" y2="75" stroke="#38BDF8" stroke-width="0.8" opacity="0.6"/>
+                        <line x1="95" y1="75" x2="155" y2="75" stroke="#38BDF8" stroke-width="0.8" opacity="0.6"/>
+                        <line x1="170" y1="75" x2="230" y2="75" stroke="#38BDF8" stroke-width="0.8" opacity="0.6"/>
+                    </svg>
+                </div>
+                <div class="banner-text">
+                    <p class="tagline-1">Clean Energy</p>
+                    <p class="tagline-2">Smarter Decisions</p>
+                    <p class="tagline-3">A Sustainable Tomorrow</p>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header Bar -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <div class="status-badge" id="status-pill">
+                        <span class="pulse-dot"></span>
+                        <div class="status-texts">
+                            <span class="status-label">Forecast data updated</span>
+                            <span class="status-time" id="last-updated-text">Today, Live</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="top-bar-right">
+                    <div class="header-info-badge">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                        <span id="header-location-tag">Indore, MP</span>
+                    </div>
+                    <div class="header-info-badge">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                        <span id="header-date-tag">Live Today</span>
+                    </div>
+                    <div class="user-avatar" title="SolarPredict BCA Project">
+                        <span>M</span>
+                    </div>
+                </div>
+            </header>
+
+            <!-- ============================================================
+                 PAGE 1: DASHBOARD
+                 ============================================================ -->
+            <section class="page-view active" id="page-dashboard">
+                <!-- Hero Section -->
+                <section class="page-header-section">
+                    <h1 class="page-title">
+                        Predict Solar Energy,<br>
+                        Plan a <span class="gold-gradient">Greener Tomorrow</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        Use AI and real-time weather forecasts to estimate your solar PV power output.
+                    </p>
+                </section>
+
+                <!-- Control Bar (Form Card) -->
+                <section class="control-card">
+                    <form id="prediction-form" class="control-form">
+                        <!-- Location Selector -->
+                        <div class="form-group">
+                            <label for="location-select">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                                Location
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="location-select" name="location">
+                                    <option value="Indore, Madhya Pradesh" selected>Indore, Madhya Pradesh</option>
+                                    <option value="Bhopal, Madhya Pradesh">Bhopal, Madhya Pradesh</option>
+                                    <option value="Jaipur, Rajasthan">Jaipur, Rajasthan</option>
+                                    <option value="New Delhi, Delhi">New Delhi, Delhi</option>
+                                    <option value="Mumbai, Maharashtra">Mumbai, Maharashtra</option>
+                                    <option value="Bengaluru, Karnataka">Bengaluru, Karnataka</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Installed Capacity -->
+                        <div class="form-group">
+                            <label for="capacity-input">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                                Installed Capacity
+                            </label>
+                            <div class="input-with-unit">
+                                <input type="number" id="capacity-input" name="capacity_kw" value="5" min="0.5" max="1000" step="0.5" required>
+                                <span class="unit-tag">kW</span>
+                            </div>
+                        </div>
+
+                        <!-- Prediction Date -->
+                        <div class="form-group">
+                            <label for="date-select">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+                                Prediction Date
+                            </label>
+                            <div class="select-wrapper">
+                                <select id="date-select" name="date">
+                                    <option value="tomorrow" selected>Tomorrow</option>
+                                    <option value="today">Today</option>
+                                    <option value="+2days">+2 Days Ahead</option>
+                                    <option value="+3days">+3 Days Ahead</option>
+                                    <option value="+4days">+4 Days Ahead</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- CTA Button -->
+                        <div class="form-group submit-group">
+                            <button type="submit" id="generate-btn" class="btn-primary">
+                                <span class="btn-text">Generate Prediction</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                            </button>
+                        </div>
+                    </form>
+                </section>
+
+                <!-- KPI Cards Row -->
+                <section class="kpi-grid">
+                    <!-- Card 1: Total Energy -->
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Total Energy (Predicted)</span>
+                            <div class="kpi-icon-circle green">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                            </div>
+                        </div>
+                        <div class="kpi-value-row">
+                            <h2 class="kpi-number" id="kpi-total-energy">-- kWh</h2>
+                            <span class="kpi-badge green" id="kpi-energy-badge">↑ 12%</span>
+                        </div>
+                        <span class="kpi-subtext" id="kpi-energy-sub">vs. previous day</span>
+                    </div>
+
+                    <!-- Card 2: Peak Power -->
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Peak Power</span>
+                            <div class="kpi-icon-circle blue">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                            </div>
+                        </div>
+                        <div class="kpi-value-row">
+                            <h2 class="kpi-number" id="kpi-peak-power">-- kW</h2>
+                        </div>
+                        <span class="kpi-subtext">at <strong id="kpi-peak-time">--:--</strong></span>
+                    </div>
+
+                    <!-- Card 3: Sunshine Hours -->
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Sunshine Hours</span>
+                            <div class="kpi-icon-circle amber">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                            </div>
+                        </div>
+                        <div class="kpi-value-row">
+                            <h2 class="kpi-number" id="kpi-sun-hours">-- hrs</h2>
+                        </div>
+                        <span class="kpi-subtext">(Effective)</span>
+                    </div>
+
+                    <!-- Card 4: Forecast Condition -->
+                    <div class="kpi-card">
+                        <div class="kpi-header">
+                            <span class="kpi-title">Forecast Condition</span>
+                            <div class="kpi-icon-circle purple">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                            </div>
+                        </div>
+                        <div class="kpi-value-row">
+                            <h2 class="kpi-number" id="kpi-forecast-cond">--</h2>
+                        </div>
+                        <span class="kpi-subtext">Cloud cover: <strong id="kpi-cloud-cover">--%</strong></span>
+                    </div>
+                </section>
+
+                <!-- Middle Section: Power Graph & Weather Table -->
+                <section class="mid-grid">
+                    <div class="dashboard-card power-chart-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Hourly Predicted Solar Power Output</h3>
+                            <div class="chart-legend-indicator">
+                                <span class="legend-dot"></span>
+                                <span class="legend-text">Predicted Power (kW)</span>
+                            </div>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="hourlyPowerChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card weather-card">
+                        <div class="card-header">
+                            <h3 class="card-title" id="weather-card-title">Weather Forecast (Tomorrow)</h3>
+                            <div class="info-icon-wrapper" title="Real-time forecast from Open-Meteo API">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            </div>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="weather-table">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>Temperature</th>
+                                        <th>Cloud Cover</th>
+                                        <th>Wind Speed</th>
+                                        <th>Condition</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="weather-tbody">
+                                    <tr><td colspan="5" class="table-loading">Loading meteorological forecast...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Bottom Section: Daily Energy, Insights, Environmental Impact -->
+                <section class="bottom-grid">
+                    <div class="dashboard-card daily-energy-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Daily Energy Estimate</h3>
+                        </div>
+                        <div class="chart-container bar-chart-container">
+                            <canvas id="dailyEnergyChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card insights-card">
+                        <div class="card-header">
+                            <div class="card-title-with-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2.2"><path d="M9 18h6"></path><path d="M10 22h4"></path><path d="M12 2a7 7 0 0 0-7 7c0 2.38 1.19 4.47 3 5.74V17a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-2.26c1.81-1.27 3-3.36 3-5.74a7 7 0 0 0-7-7z"></path></svg>
+                                <h3 class="card-title">Prediction Insights</h3>
+                            </div>
+                        </div>
+                        <ul class="insights-list" id="insights-list">
+                            <li><span class="check-icon">✓</span> Good solar generation expected tomorrow.</li>
+                            <li><span class="check-icon">✓</span> Peak output around 12:00 PM.</li>
+                            <li><span class="check-icon">✓</span> Cloud cover may slightly reduce output in the afternoon.</li>
+                            <li><span class="check-icon">✓</span> Ideal conditions for solar energy production.</li>
+                        </ul>
+                    </div>
+
+                    <div class="dashboard-card impact-card">
+                        <div class="card-header">
+                            <div class="card-title-with-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2.2"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path></svg>
+                                <h3 class="card-title">Environmental Impact</h3>
+                            </div>
+                        </div>
+                        <div class="impact-content">
+                            <div class="impact-item">
+                                <div class="impact-icon-circle green">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                                </div>
+                                <div class="impact-details">
+                                    <h4 class="impact-metric" id="eco-clean-energy">-- kWh</h4>
+                                    <span class="impact-desc">Clean energy generated</span>
+                                </div>
+                            </div>
+
+                            <div class="impact-item">
+                                <div class="impact-icon-circle slate">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#94A3B8" stroke-width="2"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>
+                                </div>
+                                <div class="impact-details">
+                                    <h4 class="impact-metric" id="eco-co2-saved">≈ -- kg</h4>
+                                    <span class="impact-desc">CO₂ emissions avoided</span>
+                                </div>
+                            </div>
+
+                            <div class="impact-item">
+                                <div class="impact-icon-circle teal">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2"><path d="M12 22v-7"></path><path d="M9 18H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v7a2 2 0 0 1-2 2h-4"></path><path d="M12 2a5 5 0 0 0-5 5v3h10V7a5 5 0 0 0-5-5z"></path></svg>
+                                </div>
+                                <div class="impact-details">
+                                    <h4 class="impact-metric" id="eco-trees-metric">Equivalent to</h4>
+                                    <span class="impact-desc" id="eco-trees-desc">planting 1 tree per day</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+            <!-- ============================================================
+                 PAGE 2: PREDICTIONS STUDIO (Multi-Scenario Analysis & CSV)
+                 ============================================================ -->
+            <section class="page-view" id="page-predictions">
+                <section class="page-header-section">
+                    <h1 class="page-title">
+                        Solar Generation <span class="gold-gradient">Studio</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        Multi-capacity scenario analysis, 24-hour irradiance breakdown, and exportable data logs.
+                    </p>
+                </section>
+
+                <!-- Multi-Capacity Scenario Cards -->
+                <div class="scenarios-grid">
+                    <div class="scenario-card">
+                        <div class="scenario-tag">Residential (3 kW)</div>
+                        <div class="scenario-val" id="scenario-val-3kw">-- kWh</div>
+                        <div class="scenario-sub">Compact rooftop installation</div>
+                    </div>
+                    <div class="scenario-card active-scenario">
+                        <div class="scenario-tag">Standard Reference (5 kW)</div>
+                        <div class="scenario-val" id="scenario-val-5kw">-- kWh</div>
+                        <div class="scenario-sub">Standard urban rooftop benchmark</div>
+                    </div>
+                    <div class="scenario-card">
+                        <div class="scenario-tag">Commercial (10 kW)</div>
+                        <div class="scenario-val" id="scenario-val-10kw">-- kWh</div>
+                        <div class="scenario-sub">Small business / commercial facility</div>
+                    </div>
+                    <div class="scenario-card">
+                        <div class="scenario-tag">Industrial Mini-Grid (15 kW)</div>
+                        <div class="scenario-val" id="scenario-val-15kw">-- kWh</div>
+                        <div class="scenario-sub">High-capacity distributed array</div>
+                    </div>
+                </div>
+
+                <!-- Scenario Comparison Chart -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Capacity Scaling Comparison (3 kW vs 5 kW vs 10 kW vs 15 kW)</h3>
+                        <span class="ribbon-label">Linear Derating Physical Model</span>
+                    </div>
+                    <div class="chart-container tall">
+                        <canvas id="scenarioChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- 24-Hour Detailed Breakdown Table with CSV Export -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <div class="card-title-with-icon">
+                            <h3 class="card-title">24-Hour Detailed Generation & Solar Irradiance Breakdown</h3>
+                        </div>
+                        <button class="btn-secondary" id="btn-export-csv">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Export to CSV
+                        </button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Hour / Time</th>
+                                    <th>Solar Radiation (GHI)</th>
+                                    <th>Predicted Power (kW)</th>
+                                    <th>Cumulative Energy (kWh)</th>
+                                    <th>Array Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="studio-breakdown-tbody">
+                                <tr><td colspan="5" class="table-loading">Generate a prediction on the Dashboard to view detailed 24-hour studio breakdown.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 PAGE 3: HISTORY (Prediction Logs & SQLite Analytics)
+                 ============================================================ -->
+            <section class="page-view" id="page-history">
+                <section class="page-header-section">
+                    <h1 class="page-title">
+                        Prediction <span class="gold-gradient">History</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        Archived forecast runs and generation logs recorded in local SQLite database.
+                    </p>
+                </section>
+
+                <!-- History Summary Ribbon -->
+                <div class="history-stats-ribbon">
+                    <div class="ribbon-item">
+                        <span class="ribbon-label">Total Predictions Logged</span>
+                        <div class="ribbon-value" id="ribbon-total-runs">--</div>
+                    </div>
+                    <div class="ribbon-item">
+                        <span class="ribbon-label">Cumulative Energy Forecasted</span>
+                        <div class="ribbon-value" id="ribbon-total-energy">-- kWh</div>
+                    </div>
+                    <div class="ribbon-item">
+                        <span class="ribbon-label">Average Peak Power</span>
+                        <div class="ribbon-value" id="ribbon-avg-peak">-- kW</div>
+                    </div>
+                    <div class="ribbon-item">
+                        <span class="ribbon-label">Primary Target Site</span>
+                        <div class="ribbon-value" id="ribbon-top-loc">Indore</div>
+                    </div>
+                </div>
+
+                <!-- History Search and Filter Bar -->
+                <div class="dashboard-card">
+                    <div class="filter-bar">
+                        <div class="search-box">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                            <input type="text" id="history-search-input" placeholder="Search by location or date...">
+                        </div>
+                        <div class="select-wrapper" style="width: 220px;">
+                            <select id="history-loc-filter">
+                                <option value="">All Locations</option>
+                                <option value="Indore">Indore, MP</option>
+                                <option value="Bhopal">Bhopal, MP</option>
+                                <option value="Jaipur">Jaipur, RJ</option>
+                                <option value="Delhi">New Delhi</option>
+                                <option value="Mumbai">Mumbai, MH</option>
+                                <option value="Bengaluru">Bengaluru, KA</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- History Data Table -->
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Run ID</th>
+                                    <th>Installation Site</th>
+                                    <th>Capacity</th>
+                                    <th>Forecast Date</th>
+                                    <th>Total Energy</th>
+                                    <th>Peak Generation</th>
+                                    <th>Atmosphere</th>
+                                </tr>
+                            </thead>
+                            <tbody id="history-full-tbody">
+                                <tr><td colspan="7" class="table-loading">Loading prediction records from SQLite...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 PAGE 4: LOCATIONS (Regional Solar Potential Explorer)
+                 ============================================================ -->
+            <section class="page-view" id="page-locations">
+                <section class="page-header-section">
+                    <h1 class="page-title">
+                        Regional Solar <span class="gold-gradient">Potential</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        Pre-configured geographical sites across India with solar insolation ratings and optimal panel tilt.
+                    </p>
+                </section>
+
+                <div class="locations-grid">
+                    <!-- Indore Card -->
+                    <div class="location-card">
+                        <div>
+                            <div class="location-card-header">
+                                <div class="location-card-title">
+                                    <h3>Indore</h3>
+                                    <span>Madhya Pradesh, India</span>
+                                </div>
+                                <span class="rating-badge exceptional">Very High</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="loc-metric-item">
+                                    <span>Coordinates</span>
+                                    <strong>22.72° N, 75.86° E</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Optimal Tilt</span>
+                                    <strong>23° South</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Annual Insolation</span>
+                                    <strong>1,980 kWh/m²</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Elevation</span>
+                                    <strong>553 meters</strong>
+                                </div>
+                            </div>
+                            <p class="location-desc">
+                                Primary model reference installation site. Excellent solar insolation with over 300 clear sunshine days annually.
+                            </p>
+                        </div>
+                        <button class="btn-select-location" data-location="Indore, Madhya Pradesh">Select & Run Forecast →</button>
+                    </div>
+
+                    <!-- Bhopal Card -->
+                    <div class="location-card">
+                        <div>
+                            <div class="location-card-header">
+                                <div class="location-card-title">
+                                    <h3>Bhopal</h3>
+                                    <span>Madhya Pradesh, India</span>
+                                </div>
+                                <span class="rating-badge">High</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="loc-metric-item">
+                                    <span>Coordinates</span>
+                                    <strong>23.26° N, 77.41° E</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Optimal Tilt</span>
+                                    <strong>23° South</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Annual Insolation</span>
+                                    <strong>1,940 kWh/m²</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Elevation</span>
+                                    <strong>527 meters</strong>
+                                </div>
+                            </div>
+                            <p class="location-desc">
+                                Central India plateau with high average daily solar radiation and steady seasonal yields.
+                            </p>
+                        </div>
+                        <button class="btn-select-location" data-location="Bhopal, Madhya Pradesh">Select & Run Forecast →</button>
+                    </div>
+
+                    <!-- Jaipur Card -->
+                    <div class="location-card">
+                        <div>
+                            <div class="location-card-header">
+                                <div class="location-card-title">
+                                    <h3>Jaipur</h3>
+                                    <span>Rajasthan, India</span>
+                                </div>
+                                <span class="rating-badge exceptional">Exceptional</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="loc-metric-item">
+                                    <span>Coordinates</span>
+                                    <strong>26.91° N, 75.79° E</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Optimal Tilt</span>
+                                    <strong>27° South</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Annual Insolation</span>
+                                    <strong>2,150 kWh/m²</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Elevation</span>
+                                    <strong>431 meters</strong>
+                                </div>
+                            </div>
+                            <p class="location-desc">
+                                Arid desert gateway with the highest direct normal irradiance (DNI) in Northern India.
+                            </p>
+                        </div>
+                        <button class="btn-select-location" data-location="Jaipur, Rajasthan">Select & Run Forecast →</button>
+                    </div>
+
+                    <!-- Delhi Card -->
+                    <div class="location-card">
+                        <div>
+                            <div class="location-card-header">
+                                <div class="location-card-title">
+                                    <h3>New Delhi</h3>
+                                    <span>Delhi NCR, India</span>
+                                </div>
+                                <span class="rating-badge">High</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="loc-metric-item">
+                                    <span>Coordinates</span>
+                                    <strong>28.61° N, 77.21° E</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Optimal Tilt</span>
+                                    <strong>28° South</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Annual Insolation</span>
+                                    <strong>1,820 kWh/m²</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Elevation</span>
+                                    <strong>216 meters</strong>
+                                </div>
+                            </div>
+                            <p class="location-desc">
+                                Northern plains climate subject to distinct winter haze and intense summer solar generation peaks.
+                            </p>
+                        </div>
+                        <button class="btn-select-location" data-location="New Delhi, Delhi">Select & Run Forecast →</button>
+                    </div>
+
+                    <!-- Mumbai Card -->
+                    <div class="location-card">
+                        <div>
+                            <div class="location-card-header">
+                                <div class="location-card-title">
+                                    <h3>Mumbai</h3>
+                                    <span>Maharashtra, India</span>
+                                </div>
+                                <span class="rating-badge">Moderate-High</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="loc-metric-item">
+                                    <span>Coordinates</span>
+                                    <strong>19.08° N, 72.88° E</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Optimal Tilt</span>
+                                    <strong>19° South</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Annual Insolation</span>
+                                    <strong>1,850 kWh/m²</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Elevation</span>
+                                    <strong>14 meters</strong>
+                                </div>
+                            </div>
+                            <p class="location-desc">
+                                Coastal tropical environment with elevated relative humidity and heavy monsoon seasonality.
+                            </p>
+                        </div>
+                        <button class="btn-select-location" data-location="Mumbai, Maharashtra">Select & Run Forecast →</button>
+                    </div>
+
+                    <!-- Bengaluru Card -->
+                    <div class="location-card">
+                        <div>
+                            <div class="location-card-header">
+                                <div class="location-card-title">
+                                    <h3>Bengaluru</h3>
+                                    <span>Karnataka, India</span>
+                                </div>
+                                <span class="rating-badge">High</span>
+                            </div>
+                            <div class="location-metrics">
+                                <div class="loc-metric-item">
+                                    <span>Coordinates</span>
+                                    <strong>12.97° N, 77.59° E</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Optimal Tilt</span>
+                                    <strong>13° South</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Annual Insolation</span>
+                                    <strong>1,920 kWh/m²</strong>
+                                </div>
+                                <div class="loc-metric-item">
+                                    <span>Elevation</span>
+                                    <strong>920 meters</strong>
+                                </div>
+                            </div>
+                            <p class="location-desc">
+                                High-altitude Deccan plateau with moderate ambient temperatures that maintain high cell efficiency.
+                            </p>
+                        </div>
+                        <button class="btn-select-location" data-location="Bengaluru, Karnataka">Select & Run Forecast →</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 PAGE 5: MODEL METRICS (Explainable AI & Evaluation Hub)
+                 ============================================================ -->
+            <section class="page-view" id="page-models">
+                <section class="page-header-section">
+                    <h1 class="page-title">
+                        Model Metrics & <span class="gold-gradient">Evaluation</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        Academic benchmarking and explainability metrics evaluated on 8,784 hourly records (Indore, MP).
+                    </p>
+                </section>
+
+                <!-- Model Stats Grid -->
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <span class="kpi-title">Champion Model</span>
+                        <div class="kpi-value-row" style="margin-top:6px;">
+                            <h3 style="font-size:1.15rem;font-weight:700;color:#FBBF24;">Random Forest</h3>
+                        </div>
+                        <span class="kpi-subtext">100 Estimators, max_depth=16</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-title">Coefficient of Determination</span>
+                        <div class="kpi-value-row" style="margin-top:6px;">
+                            <h2 class="kpi-number" style="color:#10B981;">0.9999</h2>
+                        </div>
+                        <span class="kpi-subtext">R² Score on Test Split (20%)</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-title">Root Mean Squared Error</span>
+                        <div class="kpi-value-row" style="margin-top:6px;">
+                            <h2 class="kpi-number">0.0088</h2>
+                            <span class="kpi-badge green">kW</span>
+                        </div>
+                        <span class="kpi-subtext">RMSE on 1,757 test samples</span>
+                    </div>
+                    <div class="kpi-card">
+                        <span class="kpi-title">Mean Absolute Error</span>
+                        <div class="kpi-value-row" style="margin-top:6px;">
+                            <h2 class="kpi-number">0.0041</h2>
+                            <span class="kpi-badge green">kW</span>
+                        </div>
+                        <span class="kpi-subtext">MAE error magnitude</span>
+                    </div>
+                </div>
+
+                <!-- Comparison Chart & Table -->
+                <div class="mid-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Model Architecture Comparison</h3>
+                            <span class="ribbon-label">Evaluated on identical test set</span>
+                        </div>
+                        <div class="chart-container">
+                            <canvas id="modelCompChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Model Benchmark Table</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="data-table">
+                                <thead>
+                                    <tr>
+                                        <th>Model</th>
+                                        <th>MAE (kW)</th>
+                                        <th>RMSE (kW)</th>
+                                        <th>R²</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="models-comp-tbody">
+                                    <tr>
+                                        <td><strong>Random Forest</strong> <span class="kpi-badge green">Champion</span></td>
+                                        <td>0.0041</td>
+                                        <td>0.0088</td>
+                                        <td><strong>0.9999</strong></td>
+                                        <td><span class="kpi-badge gold">Deployed</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Decision Tree</strong></td>
+                                        <td>0.0059</td>
+                                        <td>0.0118</td>
+                                        <td>0.9999</td>
+                                        <td><span class="kpi-badge" style="background:#1E293B;color:#64748B;">Benchmarked</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Linear Regression</strong></td>
+                                        <td>0.0182</td>
+                                        <td>0.0322</td>
+                                        <td>0.9991</td>
+                                        <td><span class="kpi-badge" style="background:#1E293B;color:#64748B;">Baseline</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Feature Importance & Mathematical Formulation -->
+                <div class="mid-grid">
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">Feature Importance Analysis</h3>
+                            <span class="ribbon-label">Gini Impurity Metric</span>
+                        </div>
+                        <div class="feature-bars-list">
+                            <div class="feature-bar-item">
+                                <div class="feature-bar-info">
+                                    <span class="feature-name">Shortwave Radiation (GHI W/m²)</span>
+                                    <span class="feature-pct">68.4%</span>
+                                </div>
+                                <div class="feature-bar-bg"><div class="feature-bar-fill" style="width: 68.4%;"></div></div>
+                            </div>
+                            <div class="feature-bar-item">
+                                <div class="feature-bar-info">
+                                    <span class="feature-name">Direct Normal Irradiance (DNI W/m²)</span>
+                                    <span class="feature-pct">14.2%</span>
+                                </div>
+                                <div class="feature-bar-bg"><div class="feature-bar-fill" style="width: 14.2%;"></div></div>
+                            </div>
+                            <div class="feature-bar-item">
+                                <div class="feature-bar-info">
+                                    <span class="feature-name">Ambient Temperature (2m °C)</span>
+                                    <span class="feature-pct">7.8%</span>
+                                </div>
+                                <div class="feature-bar-bg"><div class="feature-bar-fill" style="width: 7.8%;"></div></div>
+                            </div>
+                            <div class="feature-bar-item">
+                                <div class="feature-bar-info">
+                                    <span class="feature-name">Diffuse Solar Radiation (DHI W/m²)</span>
+                                    <span class="feature-pct">4.6%</span>
+                                </div>
+                                <div class="feature-bar-bg"><div class="feature-bar-fill" style="width: 4.6%;"></div></div>
+                            </div>
+                            <div class="feature-bar-item">
+                                <div class="feature-bar-info">
+                                    <span class="feature-name">Cyclical Diurnal Time Enc (hour_sin/cos)</span>
+                                    <span class="feature-pct">3.2%</span>
+                                </div>
+                                <div class="feature-bar-bg"><div class="feature-bar-fill" style="width: 3.2%;"></div></div>
+                            </div>
+                            <div class="feature-bar-item">
+                                <div class="feature-bar-info">
+                                    <span class="feature-name">Relative Humidity & Wind Speed</span>
+                                    <span class="feature-pct">1.8%</span>
+                                </div>
+                                <div class="feature-bar-bg"><div class="feature-bar-fill" style="width: 1.8%;"></div></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-card">
+                        <div class="card-header">
+                            <h3 class="card-title">PV Physics & Derating Formula</h3>
+                        </div>
+                        <p style="font-size: 0.80rem; color: var(--text-secondary); line-height: 1.5;">
+                            The training target is derived from the standard IEC 61724 / PVGIS empirical photovoltaic cell temperature model:
+                        </p>
+                        <div class="formula-box">
+P(t) = P_peak × (G(t) / 1000) × [1 - γ(T_cell - 25°C)] × η_sys
+T_cell = T_amb + G(t) × ((NOCT - 20) / 800)
+
+γ = 0.004 / °C (Silicon Temp Coeff)
+NOCT = 45 °C (Nominal Operating Cell Temp)
+η_sys = 0.86 (14% system & inverter losses)
+                        </div>
+                        <p style="font-size: 0.78rem; color: var(--text-muted);">
+                            <strong>Physical Clamping:</strong> Negative predictions clamped to 0.0 kW; Nighttime generation strictly locked to 0.0 kW whenever GHI ≤ 1.0 W/m².
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ============================================================
+                 PAGE 6: ABOUT (Project Identity & System Architecture)
+                 ============================================================ -->
+            <section class="page-view" id="page-about">
+                <section class="page-header-section">
+                    <h1 class="page-title">
+                        About <span class="gold-gradient">SolarPredict</span>
+                    </h1>
+                    <p class="page-subtitle">
+                        AI-Based Solar Photovoltaic Generation & Energy Forecasting Platform.
+                    </p>
+                </section>
+
+                <div class="about-hero-card">
+                    <h2 style="font-size: 1.4rem; color: var(--text-primary); margin-bottom: 8px;">
+                        BCA Minor Project — University Examination Edition
+                    </h2>
+                    <p style="color: var(--text-secondary); font-size: 0.90rem; max-width: 900px; line-height: 1.6;">
+                        SolarPredict is an artificial intelligence-driven solar photovoltaic forecasting system designed to predict short-term power output (kW) and estimated daily energy (kWh) of solar installations using forecasted meteorological and solar conditions.
+                    </p>
+                </div>
+
+                <!-- Pipeline Architecture Workflow -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3 class="card-title">System Architecture & Data Flow Pipeline</h3>
+                    </div>
+                    <div class="pipeline-flow">
+                        <div class="pipeline-step">
+                            <span class="step-icon">🌐</span>
+                            <h4>Weather Fetcher</h4>
+                            <p>Open-Meteo 7-day hourly forecast API</p>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-icon">⚙️</span>
+                            <h4>Preprocessing</h4>
+                            <p>Cyclical time encodings & feature matrix</p>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-icon">🧠</span>
+                            <h4>ML Inference</h4>
+                            <p>Trained Random Forest Regressor (Joblib)</p>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-icon">🛡️</span>
+                            <h4>Physical Clamp</h4>
+                            <p>Nighttime 0 kW & capacity bounds</p>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-icon">⚡</span>
+                            <h4>Energy Integration</h4>
+                            <p>Hourly power integration (kWh) & KPIs</p>
+                        </div>
+                        <div class="pipeline-arrow">→</div>
+                        <div class="pipeline-step">
+                            <span class="step-icon">📊</span>
+                            <h4>Dark Dashboard</h4>
+                            <p>Chart.js visualizations & SQLite log</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Technology Stack -->
+                <div class="dashboard-card">
+                    <div class="card-header">
+                        <h3 class="card-title">Technology Stack & Implementation Libraries</h3>
+                    </div>
+                    <div class="tech-grid">
+                        <div class="tech-card">
+                            <h4>Python 3.12</h4>
+                            <p>Core language for data processing, machine learning pipeline, and API backend.</p>
+                        </div>
+                        <div class="tech-card">
+                            <h4>Scikit-Learn</h4>
+                            <p>Supervised regression models: Linear Regression, Decision Tree, and Random Forest.</p>
+                        </div>
+                        <div class="tech-card">
+                            <h4>Flask</h4>
+                            <p>Lightweight WSGI web server and REST API delivering JSON forecasts.</p>
+                        </div>
+                        <div class="tech-card">
+                            <h4>Pandas & NumPy</h4>
+                            <p>High-performance tabular data manipulation and numerical matrix operations.</p>
+                        </div>
+                        <div class="tech-card">
+                            <h4>SQLite 3</h4>
+                            <p>Embedded ACID database storing installation sites and prediction history logs.</p>
+                        </div>
+                        <div class="tech-card">
+                            <h4>Chart.js 4</h4>
+                            <p>Interactive HTML5 Canvas visualizations with gradients, tooltips, and responsive scaling.</p>
+                        </div>
+                        <div class="tech-card">
+                            <h4>Joblib</h4>
+                            <p>Optimized serialization pipeline for saving and loading trained scikit-learn models.</p>
+                        </div>
+                        <div class="tech-card">
+                            <h4>Open-Meteo API</h4>
+                            <p>Open-access meteorological forecast and historical ERA5 reanalysis weather data.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- JavaScript: supports both local root dashboard.js and static/js/dashboard.js -->
+    <script src="dashboard.js"></script>
+    <script src="static/js/dashboard.js"></script>
+    <script src="/static/js/dashboard.js"></script>
+</body>
+</html>
