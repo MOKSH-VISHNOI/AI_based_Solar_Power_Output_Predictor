@@ -4,9 +4,9 @@
  * Regional Locations Explorer, Academic Model Metrics, and Main Dashboard.
  */
 
-const API_BASE = (window.location.protocol === 'file:' || (window.location.port !== '5000' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1'))
-    ? 'http://127.0.0.1:5000'
-    : (window.location.port !== '5000' && window.location.port !== '' ? 'http://127.0.0.1:5000' : '');
+// Use same-origin relative URLs when served by any web server (Flask local or Render cloud).
+// Only point to local Flask dev server when opened directly as a file:// URL.
+const API_BASE = window.location.protocol === 'file:' ? 'http://127.0.0.1:5000' : '';
 
 // Chart instances
 let hourlyChartInstance = null;
